@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.list_item_textview, R.id.my_item_textview, mNames);
 
-        ListView myListView = (ListView)findViewById(R.id.my_listview);
+        final ListView myListView = (ListView)findViewById(R.id.my_listview);
         myListView.setAdapter(adapter);
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -46,8 +46,17 @@ public class MainActivity extends AppCompatActivity {
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
 
-                Intent intent = new Intent(getApplicationContext(), MountainDetailsActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(myListView.getContext(), MountainDetailsActivity.class);
+                Bundle extras = new Bundle();
+
+                String name = mountainNames[position];
+                String location = mountainLocations[position];
+                String height = Integer.toString(mountainHeights[position]);
+                extras.putString("EXTRA_NAME", name);
+                extras.putString("EXTRA_LOCATION", location);
+                extras.putString("EXTRA_HEIGHT", height);
+                intent.putExtras(extras);
+                myListView.getContext().startActivity(intent);
             }
         });
 
